@@ -7,21 +7,22 @@ import autoTable from 'jspdf-autotable';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../../components/Navbar/Navbar";
 import { useSikshanidhi } from "../../../contexts/SikshanidhiContext";
-import { Timestamp, deleteDoc, doc, setDoc, updateDoc } from "firebase/firestore";
+import { Timestamp, deleteDoc, doc, addDoc, updateDoc, collection } from "firebase/firestore";
 import { db } from "../../../firebase-config";
 import { useAllFirms } from "../../../contexts/AllFirmsContext";
+import { useUser } from "../../../contexts/UserContext";
 
 const ITEMS_PER_PAGE = 10;
 const days = {
-  "day-1" : new Date("10/15/2023").toLocaleDateString("en-GB"),
-  "day-2" : new Date("10/16/2023").toLocaleDateString("en-GB"),
-  "day-3" : new Date("10/17/2023").toLocaleDateString("en-GB"),
-  "day-4" : new Date("10/18/2023").toLocaleDateString("en-GB"),
-  "day-5" : new Date("10/19/2023").toLocaleDateString("en-GB"),
-  "day-6" : new Date("10/20/2023").toLocaleDateString("en-GB"),
-  "day-7" : new Date("10/21/2023").toLocaleDateString("en-GB"),
-  "day-8" : new Date("10/22/2023").toLocaleDateString("en-GB"),
-  "day-9" : new Date("10/23/2023").toLocaleDateString("en-GB"),
+  "day-1" : new Date("10/03/2024").toLocaleDateString("en-GB"),
+  "day-2" : new Date("10/04/2024").toLocaleDateString("en-GB"),
+  "day-3" : new Date("10/05/2024").toLocaleDateString("en-GB"),
+  "day-4" : new Date("10/06/2024").toLocaleDateString("en-GB"),
+  "day-5" : new Date("10/07/2024").toLocaleDateString("en-GB"),
+  "day-6" : new Date("10/08/2024").toLocaleDateString("en-GB"),
+  "day-7" : new Date("10/09/2024").toLocaleDateString("en-GB"),
+  "day-8" : new Date("10/10/2024").toLocaleDateString("en-GB"),
+  "day-9" : new Date("10/11/2024").toLocaleDateString("en-GB"),
 }
 
 const Sikshanidhi = () => {
@@ -34,6 +35,8 @@ const Sikshanidhi = () => {
   const {sikshanidhiState : {sikshanidhi}} = useSikshanidhi();  
   const {allFirmsState : {allFirms}} = useAllFirms();
   const navigate = useNavigate();
+  const {useState: {user}} = useUser();
+  let recievers = user === "bhanpuri" ? ["Rajesh Nakrani", "Piyush Rudani", "Harshad Chhabhaiya", "Shubham Bhagat"] : ["Vijay Chhabhaiya"];
 
   useEffect(()=>{
     setResults((dayId==="all" ? sikshanidhi : sikshanidhi.filter(firm=>firm.date === days[dayId])).filter((item) =>
@@ -48,11 +51,11 @@ const Sikshanidhi = () => {
   };
 
   const saveNewFirm = async (firmDetails) => {
-    let firm = allFirms.find(firm => firm.id === firmDetails.name);
+    let firm = allFirms.find(firm => firm.name === firmDetails.name);
     if(firm){
-      await setDoc(doc(db,"sikshanidhi", firmDetails.name),{...firmDetails, name: firm.name, place:firm.place, date: Timestamp.fromDate(new Date())});
+      await addDoc(collection(db,"sikshanidhi"),{...firmDetails, name: firm.name, place:firm.place, date: Timestamp.fromDate(new Date())});
     
-      await updateDoc(doc(db, "allFirms", firm.name), {
+      await updateDoc(doc(db, "allFirms", firm.id), {
         sikshanidhiPrevious : firmDetails.previous,
         sikshanidhiCurrent : firmDetails.current,
         sikshanidhiPayer : firmDetails.payer,
@@ -62,9 +65,9 @@ const Sikshanidhi = () => {
     }
     else{
       console.log("No firm found in all firms");
-      await setDoc(doc(db,"sikshanidhi", firmDetails.name),{...firmDetails, date: Timestamp.fromDate(new Date())});
+      await addDoc(collection(db,"sikshanidhi"),{...firmDetails, date: Timestamp.fromDate(new Date())});
     
-      await setDoc(doc(db, "allFirms", firmDetails.name), {
+      await addDoc(collection(db, "allFirms"), {
         name: firmDetails.name,
         place: firmDetails.place,
         sikshanidhiPrevious : firmDetails.previous,
@@ -76,7 +79,15 @@ const Sikshanidhi = () => {
         phaadCurrent : 0,
         phaadPayer : "",
         phaadMobile : "",
-        phaadReciever : ""
+        phaadReciever : "",
+        aarti : 0,
+        aartiDate: "",
+        prasadi : 0,
+        coupon : 0,
+        aartiName : "",
+        datarPayer: "",
+        datarMobile: "",
+        datarReciever : ""
       })
     }
     document.getElementById('newFirmClose').click();
@@ -106,15 +117,17 @@ const Sikshanidhi = () => {
        updatingAllBody = {...updatingAllBody, sikshanidhiReciever: currentDetails.reciever}
     }
 
-    await updateDoc(doc(db, "sikshanidhi", currentDetails.name), updatingSikshanidhiBody);
-    await updateDoc(doc(db, "allFirms", currentDetails.name), updatingAllBody);
+    await updateDoc(doc(db, "sikshanidhi", currentDetails.id), updatingSikshanidhiBody);
+    await updateDoc(doc(db, "allFirms", currentDetails.id), updatingAllBody);
 
     document.getElementById('newFirmClose').click();
   }
 
-  const deleteFirm = async (name) => {
-    await deleteDoc(doc(db, "sikshanidhi", name));
-    await updateDoc(doc(db, "allFirms", name), {
+  const deleteFirm = async (firm) => {
+     
+    await deleteDoc(doc(db, "sikshanidhi", firm.id));
+    const updateFirm = allFirms?.find(curr => curr.name === firm.name);
+    await updateDoc(doc(db, "allFirms", updateFirm?.id), {
       sikshanidhiCurrent : 0,
       sikshanidhiReciever: "",
       sikshanidhiPrevious: 0,
@@ -176,8 +189,8 @@ const Sikshanidhi = () => {
                   <th className="col-1 text-center border-3">Date</th>
                   <th className="col-5 border-3">Firm Name</th>
                   <th className="col-1 text-center border-3">Place</th>
-                  <th className="text-center border-3">Prev (2022)</th>
-                  <th className="text-center border-3">Curr (2023)</th>
+                  <th className="text-center border-3">Prev (2023)</th>
+                  <th className="text-center border-3">Curr (2024)</th>
                   <th className="text-center border-3">Actions</th>
                 </tr>
               </thead>
@@ -193,7 +206,7 @@ const Sikshanidhi = () => {
                       </td>
                       <td className="text-center border-3">{firm.current >0 ? firm.current : "-"}</td>
                      <td className="text-center border-3 d-flex gap-3 justify-content-center">
-                      <i className="bi bi-trash3-fill" title="Delete Firm" onClick={()=>deleteFirm(firm.name)}></i>
+                      <i className="bi bi-trash3-fill" title="Delete Firm" onClick={()=>deleteFirm(firm)}></i>
                       </td>
                     </tr>
                   );
@@ -270,13 +283,13 @@ const Sikshanidhi = () => {
                   </div>
               </div>
               <div className="mb-3 row">
-                <label htmlFor="previous" className="col-sm-2 col-form-label">Previous (2022)</label>
+                <label htmlFor="previous" className="col-sm-2 col-form-label">Previous (2023)</label>
                 <div className="col-sm-10">
                   <input type="number" min="0" placeholder="-" className="form-control" id="previous" value={currentDetails?.previous} onChange={e=>setCurrentDetails({...currentDetails, previous: Number(e.target.value)})}/>
                 </div>
               </div>
               <div className="mb-3 row">
-                <label htmlFor="current" className="col-sm-2 col-form-label">Current (2023)</label>
+                <label htmlFor="current" className="col-sm-2 col-form-label">Current (2024)</label>
                 <div className="col-sm-10">
                   <input type="number" min="0" placeholder="-" className="form-control" id="current" value={currentDetails?.current} onChange={e=>setCurrentDetails({...currentDetails, current: Number(e.target.value)})}/>
                 </div>
@@ -295,9 +308,16 @@ const Sikshanidhi = () => {
               </div>
               <div className="mb-3 row">
                 <label htmlFor="receiver" className="col-sm-2 col-form-label">Haste (Receiver)</label>
-                <div className="col-sm-10">
-                  <input type="text" placeholder="-" className="form-control" id="receiver" value={currentDetails?.reciever} onChange={e=>setCurrentDetails({...currentDetails, reciever: e.target.value})}/>
-                </div>
+                <div className="col-sm-8">
+                               <select class="form-select" id="sikshanidhiReceiver" aria-label="Haste (Reciever)" onChange={e=>setNewDetails({...newDetails, reciever: e.target.value})}>
+                                  <option ></option>
+                                  {
+                                    recievers.map(person => {
+                                      return <option value={person} selected={newDetails?.reciever === person}>{person}</option>
+                                    })
+                                  }
+                                </select>
+                            </div>
               </div>
             </div>
             <div className="modal-footer">
@@ -335,13 +355,13 @@ const Sikshanidhi = () => {
                   </div>
                 </div>
               <div className="mb-3 row">
-                <label htmlFor="inputPassword" className="col-sm-2 col-form-label">Previous (2022)</label>
+                <label htmlFor="inputPassword" className="col-sm-2 col-form-label">Previous (2023)</label>
                 <div className="col-sm-10">
                   <input type="number" min="0" placeholder="-" className="form-control" id="inputPassword" onChange={e=>setNewDetails({...newDetails, previous: Number(e.target.value)})}/>
                 </div>
               </div>
               <div className="mb-3 row">
-                <label htmlFor="inputPassword" className="col-sm-2 col-form-label">Current (2023)</label>
+                <label htmlFor="inputPassword" className="col-sm-2 col-form-label">Current (2024)</label>
                 <div className="col-sm-10">
                   <input type="number" min="0" placeholder="-" className="form-control" id="inputPassword" onChange={e=>setNewDetails({...newDetails, current: Number(e.target.value)})}/>
                 </div>
@@ -376,8 +396,8 @@ const Sikshanidhi = () => {
         <thead>
           <tr>
             <th className="col-6 border-3">Firm Name</th>
-            <th className="text-center border-3">Prev (2022)</th>
-            <th className="text-center border-3">Curr (2023)</th>
+            <th className="text-center border-3">Prev (2023)</th>
+            <th className="text-center border-3">Curr (2024)</th>
           </tr>
         </thead>
         <tbody>

@@ -89,7 +89,7 @@ const Collections = () => {
 
   const downloadTable = () => {
     const doc = new jsPDF();
-    doc.text("Collections 2023", 15, 12);
+    doc.text("Collections 2024", 15, 12);
     autoTable(doc, { html: '#fullDataTable' });
     doc.save('collections.pdf')
 }
@@ -118,8 +118,8 @@ const Collections = () => {
               <thead>
                 <tr>
                   <th className="col-6 border-3">Firm Name</th>
-                  <th className="text-center border-3">Prev (2022)</th>
-                  <th className="text-center border-3">Curr (2023)</th>
+                  <th className="text-center border-3">Prev (2023)</th>
+                  <th className="text-center border-3">Curr (2024)</th>
                   <th className="text-center border-3">Siksha Nidhi</th>
                   <th className="text-center border-3">Actions</th>
                 </tr>
@@ -202,13 +202,13 @@ const Collections = () => {
                 </div>
               </div>
               <div className="mb-3 row">
-                <label for="previousYearAmount" className="col-sm-2 col-form-label">Previous (2022)</label>
+                <label for="previousYearAmount" className="col-sm-2 col-form-label">Previous (2023)</label>
                 <div className="col-sm-10">
                   <input type="number" min="0" placeholder="-" className="form-control" id="previousYearAmount" value={currentDetails?.previousYearAmount} onChange={e=>setCurrentDetails({...currentDetails, previousYearAmount: Number(e.target.value)})}/>
                 </div>
               </div>
               <div className="mb-3 row">
-                <label for="currentYearAmount" className="col-sm-2 col-form-label">Current (2023)</label>
+                <label for="currentYearAmount" className="col-sm-2 col-form-label">Current (2024)</label>
                 <div className="col-sm-10">
                   <input type="number" min="0" placeholder="-" className="form-control" id="currentYearAmount" value={currentDetails?.currentYearAmount} onChange={e=>setCurrentDetails({...currentDetails, currentYearAmount: Number(e.target.value)})}/>
                 </div>
@@ -242,13 +242,13 @@ const Collections = () => {
                 </div>
               </div>
               <div className="mb-3 row">
-                <label for="inputPassword" className="col-sm-2 col-form-label">Previous (2022)</label>
+                <label for="inputPassword" className="col-sm-2 col-form-label">Previous (2023)</label>
                 <div className="col-sm-10">
                   <input type="number" min="0" placeholder="-" className="form-control" id="inputPassword" onChange={e=>setCurrentDetails({...currentDetails, previousYearAmount: Number(e.target.value)})}/>
                 </div>
               </div>
               <div className="mb-3 row">
-                <label for="inputPassword" className="col-sm-2 col-form-label">Current (2023)</label>
+                <label for="inputPassword" className="col-sm-2 col-form-label">Current (2024)</label>
                 <div className="col-sm-10">
                   <input type="number" min="0" placeholder="-" className="form-control" id="inputPassword" onChange={e=>setCurrentDetails({...currentDetails, currentYearAmount: Number(e.target.value)})}/>
                 </div>
@@ -271,8 +271,8 @@ const Collections = () => {
         <thead>
           <tr>
             <th className="col-6 border-3">Firm Name</th>
-            <th className="text-center border-3">Prev (2022)</th>
-            <th className="text-center border-3">Curr (2023)</th>
+            <th className="text-center border-3">Prev (2023)</th>
+            <th className="text-center border-3">Curr (2024)</th>
             <th className="text-center border-3">Siksha Nidhi</th>
             <th className="text-center border-3">Actions</th>
           </tr>

@@ -1,6 +1,8 @@
 module.exports = {
   packagerConfig: {
     asar: true,
+    "icon": "src/assets/umiya_mataji.ico",
+    "name": "Patidar Yuva Mandal Raipur",
     ignore: [
       "^\\/src$",
       "^\\/node_modules$",

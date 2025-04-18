@@ -1,11 +1,9 @@
-import {data} from "./data/data";
 import Login from "./pages/authentication/Login";
 import { Route, Routes } from "react-router-dom";
 import Datar from "./pages/collections/datar/Datar";
 import Phaad from "./pages/collections/phaad/Phaad";
 import AllFirms from "./pages/collections/allFirms/AllFirms";
 import Sikshanidhi from "./pages/collections/sikshanidhi/Sikshanidhi";
-import { useEffect } from "react";
 import Homepage from "./pages/homepage/Homepage";
 import { RequiresAuth } from "./utilities/Auth/RequiresAuth";
 import PhaadIndex from "./pages/collections/phaad/PhaadIndex";
@@ -18,9 +16,6 @@ import Kharcha from "./pages/collections/kharcha/Kharcha";
 import Yajman from "./pages/collections/yajman/Yajman";
 
 function App() {
-  useEffect(()=>{
-    localStorage.setItem("data", JSON.stringify(data));
-  },[]);
 
   return (
     <div className="App">

@@ -1,7 +1,7 @@
 const SikshanidhiReducer = (dataState, action) => {
     switch(action.type){
         case "SET_SIKSHANIDHI":
-            return {...dataState, sikshanidhi: action.value};
+            return {...dataState, sikshanidhi: addNewRecord(dataState.sikshanidhi, action.value)};
         case "UPDATE_SIKSHANIDHI":
             return {...dataState, sikshanidhi: updateCollection(dataState.sikshanidhi, action.value)};
         case "REMOVE_SIKSHANIDHI":
@@ -9,6 +9,16 @@ const SikshanidhiReducer = (dataState, action) => {
         default:
             return dataState;
     }
+}
+
+
+const addNewRecord = (sikshanidhi, collections) => {
+    collections.forEach(newFirm => {
+        if(!sikshanidhi.find(firm => firm.id === newFirm.id)){
+            sikshanidhi = [...sikshanidhi, newFirm];
+        }
+    })
+    return sikshanidhi;
 }
 
 const updateCollection = (collection, updatedFirm) => {

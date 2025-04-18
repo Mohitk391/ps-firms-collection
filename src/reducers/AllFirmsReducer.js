@@ -1,7 +1,8 @@
+
 const AllFirmsReducer = (dataState, action) => {
     switch(action.type){
         case "SET_ALLFIRMS":
-            return {...dataState, allFirms: action.value};
+            return {...dataState, allFirms: addNewRecord(dataState.allFirms, action.value)};
         case "UPDATE_ALLFIRMS":
             return {...dataState, allFirms: updateCollection(dataState.allFirms, action.value)};
         case "REMOVE_ALLFIRMS":
@@ -9,6 +10,15 @@ const AllFirmsReducer = (dataState, action) => {
         default:
             return dataState;
     }
+}
+
+const addNewRecord = (allFirms, collections) => {
+    collections.forEach(newFirm => {
+        if(!allFirms.find(firm => firm.id === newFirm.id)){
+            allFirms = [...allFirms, newFirm];
+        }
+    })
+    return allFirms;
 }
 
 const updateCollection = (collection, updatedFirm) => {

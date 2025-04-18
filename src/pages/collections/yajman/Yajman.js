@@ -6,8 +6,81 @@ import { useYajman } from "../../../contexts/YajmanContext";
 const Yajman = () => {
     let today = new Date().toLocaleDateString("en-GB");
     const { yajmanState : {yajman}} = useYajman();
-    let fafadih = yajman.filter(firm => firm.aartiDate === today && firm.place === "fafadih");
-    let bhanpuri = yajman.filter(firm => firm.aartiDate === today && firm.place === "bhanpuri");
+    let fafadih = yajman.filter(firm =>firm.place === "Fafadih");
+    let bhanpuri = yajman.filter(firm =>firm.place === "Bhanpuri");
+    let elements = [];
+
+    const daysIndex = {
+        1: "03/10/2024",
+        2: "04/10/2024" ,
+        3: "05/10/2024",
+        4: "06/10/2024",
+        5: "07/10/2024",
+        6: "08/10/2024",
+        7: "09/10/2024",
+        8: "10/10/2024",
+        9: "11/10/2024"
+    }
+
+      for(let i=1; i<=9; i++) {
+        elements.push(
+            <span>
+                <div className="date">
+                    <span className="h3">{daysIndex[i]} - Day {i}</span>
+                </div>
+                <div className="fafadih border border-2 rounded shadow-sm">
+                    <h2 className="text-center">Fafadih</h2>
+                    <div className="table-body d-flex justify-content-around">
+                        <div className="pratham border d-flex flex-column align-items-center flex-fill w-50">
+                            <h4 className="text-center border-bottom w-100">Pratham</h4>
+                            <div className="result-body">
+                                {
+                                    fafadih.filter(firm =>firm.aartiName === "pratham" && firm.aartiDate === daysIndex[i]).map(firm => {
+                                        return (<p>{firm.name}</p>)
+                                    })
+                                }
+                            </div>
+                        </div>
+                        <div className="biji border d-flex flex-column align-items-center flex-fill w-50">
+                            <h4 className="text-center border-bottom w-100">Biji</h4>
+                            <div className="result-body">
+                                {
+                                    fafadih.filter(firm =>firm.aartiName === "dritya"&& firm.aartiDate === daysIndex[i]).map(firm => {
+                                        return (<p>{firm.name}</p>)
+                                    })
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="bhanpuri border border-2 rounded shadow-sm">
+                    <h2 className="text-center">Bhanpuri</h2>
+                    <div className="table-body d-flex justify-content-around">
+                        <div className="pratham border flex-fill w-50 d-flex flex-column align-items-center">
+                            <h4 className="text-center border-bottom w-100">Pratham</h4>
+                            <div className="result-body">
+                                {
+                                    bhanpuri.filter(firm =>firm.aartiName === "pratham"&& firm.aartiDate === daysIndex[i]).map(firm => {
+                                        return (<p>{firm.name}</p>)
+                                    })
+                                }
+                            </div>
+                        </div>
+                        <div className="biji border flex-fill w-50 d-flex flex-column align-items-center">
+                            <h4 className="text-center border-bottom w-100">Biji</h4>
+                            <div className="result-body">
+                                {
+                                    bhanpuri.filter(firm =>firm.aartiName === "dritya" && firm.aartiDate === daysIndex[i]).map(firm => {
+                                        return (<p>{firm.name}</p>)
+                                    })
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </span>
+        );
+    }
 
     return (
         <div className="App d-flex flex-column min-vh-100">
@@ -18,60 +91,11 @@ const Yajman = () => {
                  <span className="h2">Yajman</span>
                </div>
                <div className="date">
-                <span className="h3">{today}</span>
+                <span className="h3">Today - {today}</span>
                </div>
              </div>
              <div className="main-body container d-flex flex-column gap-3">
-                <div className="fafadih border border-2 rounded shadow-sm">
-                    <h2 className="text-center">Fafadih</h2>
-                    <div className="table-body d-flex justify-content-around">
-                        <div className="pratham border flex-grow-1 d-flex flex-column align-items-center">
-                            <h4 className="text-center border-bottom w-100">Pratham</h4>
-                            <div className="result-body">
-                                {
-                                    fafadih.filter(firm =>firm.aartiName === "pratham").map(firm => {
-                                        return (<p>{firm.name}</p>)
-                                    })
-                                }
-                            </div>
-                        </div>
-                        <div className="biji border flex-grow-1 d-flex flex-column align-items-center">
-                            <h4 className="text-center border-bottom w-100">Biji</h4>
-                            <div className="result-body">
-                                {
-                                    fafadih.filter(firm =>firm.aartiName === "biji").map(firm => {
-                                        return (<p>{firm.name}</p>)
-                                    })
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="fafadih border border-2 rounded shadow-sm">
-                    <h2 className="text-center">Bhanpuri</h2>
-                    <div className="table-body d-flex justify-content-around">
-                        <div className="pratham border flex-grow-1 d-flex flex-column align-items-center">
-                            <h4 className="text-center border-bottom w-100">Pratham</h4>
-                            <div className="result-body">
-                                {
-                                    bhanpuri.filter(firm =>firm.aartiName === "pratham").map(firm => {
-                                        return (<p>{firm.name}</p>)
-                                    })
-                                }
-                            </div>
-                        </div>
-                        <div className="biji border flex-grow-1 d-flex flex-column align-items-center">
-                            <h4 className="text-center border-bottom w-100">Biji</h4>
-                            <div className="result-body">
-                                {
-                                    bhanpuri.filter(firm =>firm.aartiName === "biji").map(firm => {
-                                        return (<p>{firm.name}</p>)
-                                    })
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {elements.map(el => el)}
              </div>
    
          </main>

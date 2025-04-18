@@ -5,27 +5,27 @@ import { usePhaad } from "../../../contexts/PhaadContext";
 import { useEffect, useState } from "react";
 
 const daysIndex = {
-    "15/10/2023" : 1,
-    "16/10/2023" : 2,
-    "17/10/2023" : 3,
-    "18/10/2023" : 4,
-    "19/10/2023" : 5,
-    "20/10/2023" : 6,
-    "21/10/2023" : 7,
-    "22/10/2023" : 8,
-    "23/10/2023" : 9
+    "03/10/2024" : 1,
+    "04/10/2024" : 2,
+    "05/10/2024" : 3,
+    "06/10/2024" : 4,
+    "07/10/2024" : 5,
+    "08/10/2024" : 6,
+    "09/10/2024" : 7,
+    "10/10/2024" : 8,
+    "11/10/2024" : 9
 }
 
 const days = {
-    "day-1" : new Date("10/15/2023").toLocaleDateString("en-GB"),
-    "day-2" : new Date("10/16/2023").toLocaleDateString("en-GB"),
-    "day-3" : new Date("10/17/2023").toLocaleDateString("en-GB"),
-    "day-4" : new Date("10/18/2023").toLocaleDateString("en-GB"),
-    "day-5" : new Date("10/19/2023").toLocaleDateString("en-GB"),
-    "day-6" : new Date("10/20/2023").toLocaleDateString("en-GB"),
-    "day-7" : new Date("10/21/2023").toLocaleDateString("en-GB"),
-    "day-8" : new Date("10/22/2023").toLocaleDateString("en-GB"),
-    "day-9" : new Date("10/23/2023").toLocaleDateString("en-GB"),
+    "day-1" : new Date("10/03/2024").toLocaleDateString("en-GB"),
+    "day-2" : new Date("10/04/2024").toLocaleDateString("en-GB"),
+    "day-3" : new Date("10/05/2024").toLocaleDateString("en-GB"),
+    "day-4" : new Date("10/06/2024").toLocaleDateString("en-GB"),
+    "day-5" : new Date("10/07/2024").toLocaleDateString("en-GB"),
+    "day-6" : new Date("10/08/2024").toLocaleDateString("en-GB"),
+    "day-7" : new Date("10/09/2024").toLocaleDateString("en-GB"),
+    "day-8" : new Date("10/10/2024").toLocaleDateString("en-GB"),
+    "day-9" : new Date("10/11/2024").toLocaleDateString("en-GB"),
   }
   
 
@@ -39,7 +39,7 @@ const PhaadIndex = () => {
     },[phaad]);
 
     for(let i=1; i<=day; i++) {
-        let total = (phaad.filter(firm=>firm.date === days[`day-${i}`])).reduce((acc,curr)=>acc+curr.current,0);
+        let total = (phaad.filter(firm=>firm.date === days[`day-${i}`])).reduce((acc,curr)=>acc+Number(curr.current),0);
         elements.push(
             <div className="day-one d-grid mb-2 mx-5" key={i}>
                 <Link to={`/phaad/day-${i}`} className="btn btn-outline-dark d-flex">
@@ -59,7 +59,7 @@ const PhaadIndex = () => {
             </div>
             <div className="day-index">
                 <div className="all d-grid my-2 mx-5">
-                    <Link to="/phaad/all" className="btn btn-outline-dark d-flex"><span className="me-auto">All</span> <span className="me-3">Total - {phaad.reduce((acc,curr)=>acc+curr.current,0)}</span></Link>
+                    <Link to="/phaad/all" className="btn btn-outline-dark d-flex"><span className="me-auto">All</span> <span className="me-3">Total - {phaad.reduce((acc,curr)=>acc+Number(curr.current),0)}</span></Link>
                 </div>
                 {
                     elements.map(element => element)

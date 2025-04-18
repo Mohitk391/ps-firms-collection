@@ -36,7 +36,7 @@ const Homepage = () => {
                   <div className="card bg-c-green text-white">
                       <div className="card-block">
                           <h4 className="m-b-20">Datar</h4>
-                          <p className="m-b-0">Datar Collected<span className="f-right">{datar.reduce((acc,curr)=>acc+curr.amount,0)}</span></p>
+                          <p className="m-b-0">Datar Collected<span className="f-right">{datar.reduce((acc,curr)=>acc+Number(curr.amount),0)}</span></p>
                       </div>
                   </div>
               </div>
@@ -45,7 +45,7 @@ const Homepage = () => {
                   <div className="card bg-c-yellow text-white">
                       <div className="card-block">
                           <h4 className="m-b-20">Phaado</h4>
-                          <p className="m-b-0">Phaado Collected<span className="f-right">{phaad.reduce((acc,curr)=>acc+curr.current,0)}</span></p>
+                          <p className="m-b-0">Phaado Collected<span className="f-right">{phaad.reduce((acc,curr)=>acc+Number(curr.current),0)}</span></p>
                       </div>
                   </div>
               </div>
@@ -54,19 +54,19 @@ const Homepage = () => {
                   <div className="card bg-c-pink text-white">
                       <div className="card-block">
                           <h4 className="m-b-20">Sikshanidhi</h4>
-                          <p className="m-b-0">Sikshanidhi Collected<span className="f-right">{sikshanidhi.reduce((acc,curr)=>acc+curr.current,0)}</span></p>
+                          <p className="m-b-0">Sikshanidhi Collected<span className="f-right">{sikshanidhi.reduce((acc,curr)=>acc+Number(curr.current),0)}</span></p>
                       </div>
                   </div>
               </div>
-              <div className="col-md-4 col-xl-3 pe-none" onClick={()=>navigate("/samiti")} role="button" >
+              <div className="col-md-4 col-xl-3 pe-none display-none" onClick={()=>navigate("/samiti")} role="button" >
                   <div className="card bg-c-brown text-white">
                       <div className="card-block">
                           <h4 className="m-b-20">Samiti</h4>
-                          <p className="m-b-0">Samiti Count<span className="f-right">{samiti.reduce((acc,curr)=>acc+curr.current,0)}</span></p>
+                          <p className="m-b-0">Samiti Count<span className="f-right">{samiti.reduce((acc,curr)=>acc+Number(curr.current),0)}</span></p>
                       </div>
                   </div>
               </div>
-              <div className="col-md-4 col-xl-3" onClick={()=>navigate("/kharcha")} role="button">
+              <div className="col-md-4 col-xl-3 pe-none display-none" onClick={()=>navigate("/kharcha")} role="button">
                   <div className="card bg-c-gray text-white">
                       <div className="card-block">
                           <h4 className="m-b-20">Kharcha</h4>
@@ -77,8 +77,7 @@ const Homepage = () => {
               <div className="col-md-4 col-xl-3" onClick={()=>navigate("/yajman")} role="button">
                   <div className="card bg-c-white">
                       <div className="card-block">
-                          <h4 className="m-b-20 text-center">Today's Yajman</h4>
-                          <p className="m-b-0 invisible">Total Expense</p>
+                          <h4 className="m-b-20 text-center">Yajman</h4>
                       </div>
                   </div>
               </div>

@@ -4,7 +4,7 @@ import { UserReducer } from "../reducers/UserReducer";
 const UserContext = createContext();
 
 const initialState = {
-    user : null,
+    user : localStorage.getItem("token") ? localStorage.getItem("token") : null,
     isUserLoggedIn : localStorage.getItem("token") ? true : false
 }
 

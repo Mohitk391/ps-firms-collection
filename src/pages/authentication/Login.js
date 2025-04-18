@@ -13,11 +13,16 @@ const Login = () => {
     const formData = new FormData(even.target);
     const data = Object.fromEntries(formData);
     if(data.userName.trim() !== "" || data.password.trim() !== ""){
-      if(data.userName === "test" && data.password === "demo123"){
-          localStorage.setItem("token", "User123");
-          userDispatch({type: "SET_USER", value: "User123"});
+      if(data.userName === "fafadih" && data.password === "fafadih@123"){
+          localStorage.setItem("token", "fafadih");
+          userDispatch({type: "SET_USER", value: "fafadih"});
           navigate("/");
       }
+      else if(data.userName === "bhanpuri" && data.password === "bhanpuri123@"){
+        localStorage.setItem("token", "bhanpuri");
+        userDispatch({type: "SET_USER", value: "bhanpuri"});
+        navigate("/");
+    }
     }
   };
   return (

@@ -1,7 +1,7 @@
 const PhaadReducer = (dataState, action) => {
     switch(action.type){
         case "SET_PHAAD":
-            return {...dataState, phaad: action.value};
+            return {...dataState, phaad: addNewRecord(dataState.phaad, action.value)};
         case "UPDATE_PHAAD":
             return {...dataState, phaad : updateCollection(dataState.phaad, action.value)};
         case "REMOVE_PHAAD":
@@ -9,6 +9,15 @@ const PhaadReducer = (dataState, action) => {
         default:
             return dataState;
     }
+}
+
+const addNewRecord = (phaad, collections) => {
+    collections.forEach(newFirm => {
+        if(!phaad.find(firm => firm.id === newFirm.id)){
+            phaad = [...phaad, newFirm];
+        }
+    })
+    return phaad;
 }
 
 const updateCollection = (collection, updatedFirm) => {

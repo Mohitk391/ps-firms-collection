@@ -10,29 +10,30 @@ import { useDatar } from "../../../contexts/DatarContext";
 import { Timestamp, addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase-config";
 import { useAllFirms } from "../../../contexts/AllFirmsContext";
+import { useUser } from "../../../contexts/UserContext";
 
 const ITEMS_PER_PAGE = 10;
 const daysIndex = {
-  "15/10/2023" : 1,
-  "16/10/2023" : 2,
-  "17/10/2023" : 3,
-  "18/10/2023" : 4,
-  "19/10/2023" : 5,
-  "20/10/2023" : 6,
-  "21/10/2023" : 7,
-  "22/10/2023" : 8,
-  "23/10/2023" : 9
+  "03/10/2024" : 1,
+  "04/10/2024" : 2,
+  "05/10/2024" : 3,
+  "06/10/2024" : 4,
+  "07/10/2024" : 5,
+  "08/10/2024" : 6,
+  "09/10/2024" : 7,
+  "10/10/2024" : 8,
+  "11/10/2024" : 9
 }
 const days = {
-  "day-1" : new Date("10/15/2023").toLocaleDateString("en-GB"),
-  "day-2" : new Date("10/16/2023").toLocaleDateString("en-GB"),
-  "day-3" : new Date("10/17/2023").toLocaleDateString("en-GB"),
-  "day-4" : new Date("10/18/2023").toLocaleDateString("en-GB"),
-  "day-5" : new Date("10/19/2023").toLocaleDateString("en-GB"),
-  "day-6" : new Date("10/20/2023").toLocaleDateString("en-GB"),
-  "day-7" : new Date("10/21/2023").toLocaleDateString("en-GB"),
-  "day-8" : new Date("10/22/2023").toLocaleDateString("en-GB"),
-  "day-9" : new Date("10/23/2023").toLocaleDateString("en-GB"),
+  "day-1" : new Date("10/03/2024").toLocaleDateString("en-GB"),
+  "day-2" : new Date("10/04/2024").toLocaleDateString("en-GB"),
+  "day-3" : new Date("10/05/2024").toLocaleDateString("en-GB"),
+  "day-4" : new Date("10/06/2024").toLocaleDateString("en-GB"),
+  "day-5" : new Date("10/07/2024").toLocaleDateString("en-GB"),
+  "day-6" : new Date("10/08/2024").toLocaleDateString("en-GB"),
+  "day-7" : new Date("10/09/2024").toLocaleDateString("en-GB"),
+  "day-8" : new Date("10/10/2024").toLocaleDateString("en-GB"),
+  "day-9" : new Date("10/11/2024").toLocaleDateString("en-GB"),
 }
 
 const Datar = () => {
@@ -46,6 +47,8 @@ const Datar = () => {
   const {allFirmsState : {allFirms}} = useAllFirms();
   const today = new Date().toLocaleDateString("en-GB");
   let elements = [];
+  const {userState : {user}} = useUser();
+  let recievers = user === "bhanpuri" ? ["Rajesh Nakrani", "Piyush Rudani", "Harshad Chhabhaiya", "Shubham Bhagat"] : ["Vijay Chhabhaiya"];
 
   useEffect(()=>{
     setResults((dayId==="all" ? datar : datar.filter(firm=>firm.date === days[dayId])).filter((item) =>
@@ -204,18 +207,7 @@ const Datar = () => {
               </tbody>
             </table>
           ) : (
-            <div className="d-flex flex-column align-items-center justify-content-center">
-              <p>No records found</p>
-              <button
-                type="button"
-                className="btn btn-outline-success"
-                data-bs-toggle="modal"
-                data-bs-target="#addNew"
-                onClick={()=>setNewDetails({...newDetails, name: searchTerm})}
-              >
-                Add New Firm
-              </button>
-            </div>
+            null
           )}
 
           {results?.length > ITEMS_PER_PAGE && (
@@ -282,7 +274,9 @@ const Datar = () => {
                     <option value="prasadi" selected={currentDetails?.data === "prasadi"}>Prasadi</option>
                     <option value="aarti"selected={currentDetails?.data === "aarti"}>Aarti</option>
                     <option value="coupon" selected={currentDetails?.data === "coupon"}>Coupon</option>
-                    <option value="other" selected={(currentDetails?.data !== "prasadi" && currentDetails?.data !== "aarti" && currentDetails?.data !== "coupon")}>Other</option>
+                    <option value="murti" selected={currentDetails?.data === "murti"}>Mataji ni Murti</option>
+                    <option value="jyot" selected={currentDetails?.data === "jyot"}>Garba ni Jyot</option>
+                    <option value="fulmala" selected={currentDetails?.data === "fulmala"}>Fulmala</option>
                   </select>
                 </div>
               </div>
@@ -310,19 +304,7 @@ const Datar = () => {
                       </div>
                   </div>
                 </span>
-                ) : 
-                (
-                  (currentDetails?.data !== "prasadi" && currentDetails?.data !== "coupon") ? 
-                  (
-                    <div className="mb-3 row">
-                      <label htmlFor="data" className="col-sm-2 col-form-label">Datar Name</label>
-                      <div className="col-sm-10">
-                        <input type="text" placeholder="-" className="form-control" value={currentDetails?.data} id="data" onChange={e=>setCurrentDetails({...currentDetails, data: e.target.value})}/>
-                      </div>
-                    </div>
-                    )
-                    : null
-                )
+                ) :  null
               }
               <div className="mb-3 row">
                 <label htmlFor="current" className="col-sm-2 col-form-label">Amount</label>
@@ -345,7 +327,14 @@ const Datar = () => {
               <div className="mb-3 row">
                 <label htmlFor="receiver" className="col-sm-2 col-form-label">Haste (Receiver)</label>
                 <div className="col-sm-10">
-                  <input type="text" placeholder="-" className="form-control" id="receiver" value={currentDetails?.reciever} onChange={e=>setCurrentDetails({...currentDetails, reciever: e.target.value})} required/>
+                    <select class="form-select" id="receiver" aria-label="Haste (Reciever)" onChange={e=>setNewDetails({...newDetails, reciever: e.target.value})}>
+                      <option ></option>
+                      {
+                        recievers.map(person => {
+                          return <option value={person} selected={newDetails?.reciever === person}>{person}</option>
+                        })
+                      }
+                    </select>
                 </div>
               </div>
             </div>
@@ -391,7 +380,9 @@ const Datar = () => {
                     <option value="prasadi">Prasadi</option>
                     <option value="aarti">Aarti</option>
                     <option value="coupon">Coupon</option>
-                    <option value="other">Other</option>
+                    <option value="murti">Mataji ni Murti</option>
+                    <option value="jyot">Garba ni Jyot</option>
+                    <option value="fulmala">Fulmala</option>
                   </select>
                 </div>
               </div>
